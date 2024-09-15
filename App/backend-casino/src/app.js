@@ -8,7 +8,6 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 // Configuración de MercadoPago
 const client = new MercadoPagoConfig({
     accessToken: 'APP_USR-5360684163294216-090101-42085ff60bdfb7cf05a92b2ad223624e-237551322',
@@ -38,12 +37,12 @@ app.post('/create_preference', async (req, res) => {
                 },
             ],
             back_urls: {
-                success: 'http://localhost:5173/',
-                failure: 'http://localhost:5173/',
-                pending: 'http://localhost:5173',
+                success: 'https://www.example.com/success',
+                failure: 'https://www.example.com/failure',
+                pending: 'https://www.example.com/pending',
             },
             auto_return: 'approved',
-            notification_url: 'http://localhost:5173/', // Reemplaza con tu URL de webhook
+           //  notification_url: 'http://localhost:5173/', // Reemplaza con tu URL de webhook
         };
 
         const preference = new Preference(client);

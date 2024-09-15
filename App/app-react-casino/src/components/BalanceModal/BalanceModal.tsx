@@ -1,5 +1,5 @@
 import './BalanceModal.css';
-import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 import axios from "axios";
 import { useState, useEffect } from 'react';
 
@@ -10,18 +10,14 @@ interface BalanceModalProps {
 export const BalanceModal: React.FC<BalanceModalProps> = ({ onClose }) => {
     const [preferenceId, setPreferenceId] = useState<string | null>(null);
 
-    useEffect(() => {
-        initMercadoPago('APP_USR-03fdd897-d911-496d-8c09-61802b128fa3', {
-            locale: "es-AR",
-        });
-    }, []);
+    initMercadoPago('APP_USR-03fdd897-d911-496d-8c09-61802b128fa3');
 
     const createPreference = async () => {
         try {
             const response = await axios.post("http://localhost:3000/create_preference", {
                 title: "Tip",
                 quantity: 1,
-                price: 100,
+                price: 1000,
             });
 
             const { id } = response.data;
@@ -50,7 +46,7 @@ export const BalanceModal: React.FC<BalanceModalProps> = ({ onClose }) => {
                         <div onClick={handleBuy} className="tip">$5000</div>
                         <div onClick={handleBuy} className="tip">$10.000</div>
                         <button onClick={handleBuy} className="tip">$25.000</button>
-                        {preferenceId && <Wallet initialization={{ preferenceId }} />}
+                        {preferenceId && <Wallet initialization={{ preferenceId }} customization={{ texts:{ valueProp: 'smart_option'}}}/>}
                     </div>
                 </div>
             </div>
