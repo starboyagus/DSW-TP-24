@@ -1,0 +1,173 @@
+.title-main{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+
+.title-user{
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.new-user-main{
+    display: flex;
+    justify-content: space-between;
+}
+
+.new-user, .search-box, .filter-balance{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 1rem;
+}
+
+.filter-balance {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    background-color: var(--purple-strong);
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px; 
+    cursor: pointer;
+    font-size: 14px; 
+}
+
+.filter-btn svg {
+    margin-left: 8px; 
+    width: 16px; 
+    height: 16px; 
+}
+
+.filter-balance p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.search-box input {
+    padding: 5px 10px;
+    border: 1px solid var(--white);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--black);
+}
+
+.subtitle-user{
+    font-size: 1.1rem;
+}
+
+.list-main {
+    width: 100%;
+    padding: 10rem 1rem 5rem 1rem;
+}
+
+.header-name {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    background-color: var(--purple);
+    padding: 10px;
+    border-bottom: 2px solid var(--white);
+    font-weight: bold;
+}
+
+.header-column, .column {
+    text-align: center;
+    color: var(--white);
+}
+
+.header-column {
+    color: var(--white);
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin_list{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 10px;
+}
+
+.column {
+    text-align: center;
+}
+
+.items {
+    padding-bottom: 1rem;
+    border-bottom: 2px white solid;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.edit-btn, .delete-btn, .read-btn, .add-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--white);
+}
+
+.add-btn, .filter-btn {
+    background-color: var(--purple-strong);
+}
+
+.edit-btn {
+    background-color: var(--green);
+}
+.edit-btn {
+    background-color: var(--green);
+}
+
+.delete-btn {
+    background-color: var(--red);
+}
+
+.read-btn {
+    background-color: var(--yellow);
+}
+
+.edit-btn:hover {
+    background-color: var(--green-hover);
+}
+
+.actionbtn {
+    width: 33%;
+    text-align: center;
+    
+}
+
+.delete-btn:hover {
+    background-color: var(--red-hover);
+}
+
+.read-btn:hover {
+    background-color: var(--yellow-hover);
+}
+
+.rotate-90 {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease-in-out;
+}
+
+.filter-btn svg {
+    transition: transform 0.3s ease-in-out;
+}

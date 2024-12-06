@@ -1,0 +1,26 @@
+.slider{
+    appearance: none;
+    -webkit-appearance: none;
+    width: 60%;
+    height: 20px;
+    border-radius: 25px;
+
+}
+
+.slider::-webkit-slider-thumb{
+    cursor: pointer;
+    appearance: none;
+    height: 35px;
+    width: 35px;
+    background-color: var(--red);
+    border-radius: 50%;
+    border: 7px solid var(--white);
+}
+
+.winningMessage {
+    margin-top: 1rem;
+    display: hidden;
+    width: 100%;
+    height: 20px;
+    text-align: center;
+}
