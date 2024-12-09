@@ -12,48 +12,42 @@ interface BalanceModalProps {
 }
 
 export const BalanceModal: React.FC<BalanceModalProps> = ({ onClose, setMoney, idUser, balance, role }) => {
-    const [preferenceId, setPreferenceId] = useState<string | null>(null);
-
     const token = localStorage.getItem('jwt-token');
-
-    useEffect(() => {
-        initMercadoPago('APP_USR-03fdd897-d911-496d-8c09-61802b128fa3', {
-            locale: "es-AR",
-        });
-    }, []);
-
-    const [LoadMsg, setLoadMsg] = useState("")
     
-    /* Mercado pago
+    const Product = ()=>{
+        const [preferenceId, setPreferenceId] = useState<string | null>(null);
+    initMercadoPago("TEST-dbbfc2d8-cbb9-4a6b-86ad-891ccda92b0b",{
+        locale: "es-AR",
+    });
+        
     const createPreference = async () => {
         try {
             const response = await axios.post("http://localhost:3000/create_preference", {
-                title: "Tip",
-                quantity: 1,
-                price: 100,
-            });
-
-            const { id } = response.data;
-            return id;
+            title: "Tip",
+            quantity: 1,
+            price: 100,
+            productId: 2,
+        });
+            
+        const { id } = response.data;
+        return id;
         } catch (error) {
             console.log(error);
         }
     };
-    /*
+
     const handleBuy = async () => {
         const id = await createPreference();
         if (id) {
             setPreferenceId(id);
         }
     };
-    */
-
+    
     function addMoney(adding: number) {
         setMoney(balance + adding);
         patchUser(balance + adding);
-        setLoadMsg( adding + " coins recharge!")
     }
-
+    
     function patchUser(newMoney:number) {
         axios.put(`http://localhost:3000/api/v1/users/${idUser}`, {
             token,
@@ -61,7 +55,7 @@ export const BalanceModal: React.FC<BalanceModalProps> = ({ onClose, setMoney, i
             balance: `${newMoney}`,
         })
     }
-
+    
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -69,16 +63,15 @@ export const BalanceModal: React.FC<BalanceModalProps> = ({ onClose, setMoney, i
                 <div className="modal-body">
                     <h2>Deposit Options</h2>
                     <div className="tips">
-                        <button onClick={() => addMoney(1000)} className="tip">$1000</button>
+                        <button onClick={() => handleBuy()} className="tip">$1000</button>
                         <button onClick={() => addMoney(2000)} className="tip">$2000</button>
                         <button onClick={() => addMoney(5000)} className="tip">$5000</button>
                         <button onClick={() => addMoney(10000)} className="tip">$10.000</button>
                         <button onClick={() => addMoney(25000)} className="tip">$25.000</button>
-                        {preferenceId && <Wallet initialization={{ preferenceId }} />}
-                        <p className='tipAdvertise'>{LoadMsg}</p>
+                        {preferenceId && <Wallet initialization={{ preferenceId: preferenceId }} />}
                     </div>
                 </div>
             </div>
         </div>
     );
-};
+}};
