@@ -24,10 +24,10 @@ export const BalanceModal: React.FC<BalanceModalProps> = ({ onClose, setMoney, i
 
     const [mensajeCarga, setMensajeCarga] = useState("")
     
-    /* Mercado pago
+
     const createPreference = async () => {
         try {
-            const response = await axios.post("http://localhost:3000/create_preference", {
+            const response = await axios.post("http://localhost:3000/create_preference/", {
                 title: "Tip",
                 quantity: 1,
                 price: 100,
@@ -39,14 +39,14 @@ export const BalanceModal: React.FC<BalanceModalProps> = ({ onClose, setMoney, i
             console.log(error);
         }
     };
-    /*
+
     const handleBuy = async () => {
         const id = await createPreference();
         if (id) {
             setPreferenceId(id);
         }
     };
-    */
+
 
     function addMoney1000() {
         setMoney(balance + 1000);
@@ -99,7 +99,7 @@ export const BalanceModal: React.FC<BalanceModalProps> = ({ onClose, setMoney, i
                 <div className="modal-body">
                     <h2>Deposit Options</h2>
                     <div className="tips">
-                        <button onClick={addMoney1000} className="tip">$1000</button>
+                        <button onClick={handleBuy} className="tip">$1000</button>
                         <button onClick={addMoney2000} className="tip">$2000</button>
                         <button onClick={addMoney5000} className="tip">$5000</button>
                         <button onClick={addMoney10000} className="tip">$10.000</button>

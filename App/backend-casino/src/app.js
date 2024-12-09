@@ -39,11 +39,10 @@ app.post('/create_preference', async (req, res) => {
             ],
             back_urls: {
                 success: 'http://localhost:5173/',
-                failure: 'http://localhost:5173/',
-                pending: 'http://localhost:5173',
+                failure: 'http://localhost:5173/fail',
+                pending: 'http://localhost:5173/pending',
             },
             auto_return: 'approved',
-            notification_url: 'http://localhost:5173/', // Reemplaza con tu URL de webhook
         };
 
         const preference = new Preference(client);
