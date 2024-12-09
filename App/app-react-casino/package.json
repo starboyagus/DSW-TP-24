@@ -14,6 +14,7 @@
     "axios": "^1.7.3",
     "jwt-decode": "^4.0.0",
     "mercadopago": "^2.0.14",
+    "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.2.3",
@@ -22,6 +23,7 @@
     "sonner": "^1.5.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.1",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

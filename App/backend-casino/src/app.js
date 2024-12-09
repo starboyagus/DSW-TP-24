@@ -31,7 +31,7 @@ app.post('/create_preference', async (req, res) => {
         const body = {
             items: [
                 {
-                    title: req.body.title,
+                    title: "qonda",
                     quantity: Number(req.body.quantity),
                     unit_price: Number(req.body.price),
                     currency_id: 'ARS',
@@ -43,8 +43,9 @@ app.post('/create_preference', async (req, res) => {
                 pending: 'http://localhost:5173',
             },
             auto_return: 'approved',
-            notification_url: 'http://localhost:5173/', // Reemplaza con tu URL de webhook
+            notification_url: 'http://localhost:5173/',
         };
+        console.log("entro a preferences");
 
         const preference = new Preference(client);
         const result = await preference.create({ body });
@@ -53,7 +54,7 @@ app.post('/create_preference', async (req, res) => {
             id: result.id,
         });
     } catch (error) {
-        console.log(error);
+        console.log("el error es", error);
         res.status(500).json({
             error: 'Error al crear la preferencia',
         });

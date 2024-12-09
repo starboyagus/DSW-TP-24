@@ -27,6 +27,7 @@ import { ErrorPage } from './components/ErrorPage/ErrorPage.tsx'
 import { BettingHistory } from './components/Profile/BettingHistory/BettingHistory.tsx'
 import { Leaderboard } from './components/Leaderboard/Leaderboard.tsx'
 
+import Product from './components/MercadoPagoTest/mptest';
 
 export function App() {
     const [user, setUser] = useState({
@@ -90,6 +91,7 @@ export function App() {
                     <Route path='/help' element={<Help />} />
                     <Route path='/fair' element={<Fair />} />
                     <Route path='/game-policy' element={<GamePolicy />} />
+                    <Route path='/mptest' element={<Product />} />
                 </Routes>
             <Footer/>
             <Toaster richColors position='top-right' closeButton/>
