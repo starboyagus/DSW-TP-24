@@ -43,7 +43,7 @@ app.post('/create_preference', async (req, res) => {
                 pending: process.env.URL_CORS_PENDING,
             },
             auto_return: 'approved',
-            notification_url:"https://df65-186-158-145-120.ngrok-free.app"
+            notification_url:"https://c018-186-158-145-120.ngrok-free.app/webhook"
         };
 
         const preference = new Preference(client);
@@ -60,7 +60,6 @@ app.post('/create_preference', async (req, res) => {
     }
 });
 
-
 app.post("/webhook", async function (req, res) {
     console.log("Se realizo el pago")
 
@@ -74,7 +73,7 @@ app.post("/webhook", async function (req, res) {
                 'Authorization': `Bearer ${client.accessToken}`
             }
         });
-
+        
         if(response.ok) {
             const data = await response.json();
             console.log(data);
@@ -86,6 +85,8 @@ app.post("/webhook", async function (req, res) {
             res.sendStatus(500);
         }
 })
+
+
 
 // Middleware
 
