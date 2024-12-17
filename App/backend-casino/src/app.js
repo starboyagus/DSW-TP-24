@@ -2,12 +2,16 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
+const { QueryTypes } = require('sequelize')
+const { models } = require('./libs/sequelize')
 
 // Configuración de variables de entorno
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+let userID = ""
+let price = 0
 
 // Configuración de MercadoPago
 const client = new MercadoPagoConfig({
@@ -17,7 +21,7 @@ const client = new MercadoPagoConfig({
 // Credentials
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.URL_CORS,
     credentials: true,
 }));
 
@@ -35,17 +39,20 @@ app.post('/create_preference', async (req, res) => {
                     quantity: Number(req.body.quantity),
                     unit_price: Number(req.body.price),
                     currency_id: 'ARS',
+                    id_user: req.body.id_user
                 },
             ],
             back_urls: {
-                success: 'http://localhost:5173/',
-                failure: 'http://localhost:5173/',
-                pending: 'http://localhost:5173',
+                success: process.env.URL_CORS_SUCCESS,
+                failure: process.env.URL_CORS_FAIL,
+                pending: process.env.URL_CORS_PENDING,
             },
             auto_return: 'approved',
-            notification_url: 'http://localhost:5173/', // Reemplaza con tu URL de webhook
+            notification_url: process.env.URL_MP_NOTIFICATION
         };
 
+        userID = req.body.id_user
+        price = Number(req.body.price)
         const preference = new Preference(client);
         const result = await preference.create({ body });
 
@@ -60,7 +67,40 @@ app.post('/create_preference', async (req, res) => {
     }
 });
 
-// Middleware
+
+app.post("/webhook", async function (req, res) {
+
+
+    const paymentId = req.query['data.id'];
+    try{
+        const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': `Bearer ${client.accessToken}`
+            }
+        });
+        
+        if(response.ok) {
+            const data = await response.json();
+            
+            try {
+                if(data.status === "approved") {
+                    models.User.sequelize.query(`update Users 
+                        set balance = balance + ` + price + `
+                        where id_user = ` + userID, {type: QueryTypes.update})
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+        }
+
+        
+        res.sendStatus(200);
+    }catch (error) {
+            console.error('Error:', error);
+            res.sendStatus(500);
+        }
+})
 
 
 // Iniciar el servidor

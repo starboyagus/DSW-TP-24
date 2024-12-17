@@ -1,8 +1,11 @@
-import axios from 'axios';
+import axios from '../../../libs/axios.tsx'
 import { useEffect, useState } from 'react';
+import { useContext } from "react";
+import { userContext } from "../../../App.tsx";
 import './BettingHistory.css';
 import { NavLink as Link } from 'react-router-dom';
 import '../Profile.css';
+import { useDefaultScroll } from "../../../libs/globalFunctions.tsx";
 
 interface UserType {
     id_user: number;
@@ -13,24 +16,18 @@ interface UserType {
     name: string;
 }
 
-interface BettingHistoryProps {
-    idUser: string;
-    username: string;
-    role: string;
-}
 
-export function BettingHistory({idUser, username, role}: BettingHistoryProps) {
-    useEffect(() => {
-        window.scrollTo(0, 0)
-      }, [])
+export function BettingHistory() {
+    const contextData = useContext(userContext);
+    const role = contextData.role
+    useDefaultScroll()
 
     const [user, setUser] = useState<UserType[]>([]);
 
     const token = localStorage.getItem('jwt-token');
 
     const GetUser = () => {
-        console.log(idUser)
-        axios.get(`http://localhost:3000/api/v1/userGames/history/${idUser}`, {params: {token, role}}).then((response) =>
+        axios.get(`/userGames/history/${contextData.id_user}`, {params: {token, role}}).then((response) =>
             setUser(response.data)
         );
     };
@@ -41,11 +38,11 @@ export function BettingHistory({idUser, username, role}: BettingHistoryProps) {
 
 
     
-    let profile = '/profile/'+ username
+    const profile = '/profile/'+ contextData.username
 
     return (
         <>
-        <div className="list-main">
+        <div className="bh-list-main">
             <div className='title'>
                 <h2 className='title-user font-bold '>Betting History</h2>
                 <div className="new-user-main">

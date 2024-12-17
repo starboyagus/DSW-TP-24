@@ -1,44 +1,36 @@
-import axios from 'axios';
+import axios from '../../../libs/axios.tsx'
 import './Details.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { NavLink as Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {useParams} from 'react-router-dom'
+import { useDefaultScroll } from "../../../libs/globalFunctions.tsx";
+import { useContext } from "react";
+import { userContext } from "../../../App.tsx";
 
-interface UserType {
-    role: string;
-}
+export function Details() {
+    useDefaultScroll()
 
-export function Details({role}:UserType) {
-    useEffect(() => {
-        window.scrollTo(0, 0)
-      }, [])
-
-    let navigate = useNavigate()
-
-    const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [birthday, setBirthday] = useState("")
-    const [phone, setPhone] = useState("")
-    const [balance, setBalance] = useState(0)
-    const [country, setCountry] = useState("")
+    const contextData = useContext(userContext);
+    const navigate = useNavigate()
+    const [user, setUser] = useState({
+        username: "",
+        email: "",
+        first_name: "",
+        last_name: "",
+        birthday: "",
+        phone: "",
+        balance: "",
+        Country: ""
+    });
     const {id} = useParams();
+    const role = contextData.role
 
     const token = localStorage.getItem('jwt-token');
 
     const GetData = () => {
-        axios.get(`http://localhost:3000/api/v1/users/read/${id}`, { params: { token, role } }).then((response) => {
-            setUsername(response.data[0].username)
-            setEmail(response.data[0].email)
-            setFirstName(response.data[0].first_name)
-            setLastName(response.data[0].last_name)
-            setBirthday(response.data[0].birthday)
-            setPhone(response.data[0].phone)
-            setBalance(response.data[0].balance)
-            setCountry(response.data[0].Country)
-            console.log(response.data[0])
+        axios.get(`/users/read/${id}`, { params: { token, role } }).then((response) => {
+            setUser(response.data[0])
         });
     };
 
@@ -54,15 +46,15 @@ export function Details({role}:UserType) {
         
         <>
             <div className='details'>
-                <p className='detail_element'>ID User: {id}</p>
-                <p className='detail_element'>Username: {username}</p>
-                <p className='detail_element'>Email: {email}</p>
-                <p className='detail_element'>First Name: {firstName}</p>
-                <p className='detail_element'>Last Name: {lastName}</p>
-                <p className='detail_element'>Birthday: {birthday}</p>
-                <p className='detail_element'>Phone: {phone}</p>
-                <p className='detail_element'>Balance: {balance}</p>
-                <p className='detail_element'>Country: {country}</p>
+                <p className='detail-element'>ID User: {id}</p>
+                <p className='detail-element'>Username: {user.username}</p>
+                <p className='detail-element'>Email: {user.email}</p>
+                <p className='detail-element'>First Name: {user.first_name}</p>
+                <p className='detail-element'>Last Name: {user.last_name}</p>
+                <p className='detail-element'>Birthday: {user.birthday}</p>
+                <p className='detail-element'>Phone: {user.phone}</p>
+                <p className='detail-element'>Balance: {user.balance}</p>
+                <p className='detail-element'>Country: {user.Country}</p>
                 <button type='button' className='backDetails' onClick={back}>Back</button>
             </div>
         </>

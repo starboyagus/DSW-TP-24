@@ -1,10 +1,8 @@
-import { useEffect } from "react"
+import { useDefaultScroll } from "../../../libs/globalFunctions.tsx";
 import './privacyPolicy.css';
 
 export function PrivacyPolicy(){
-    useEffect(() => {
-        window.scrollTo(0, 0)
-      }, [])
+    useDefaultScroll()
 
     return(
         <>

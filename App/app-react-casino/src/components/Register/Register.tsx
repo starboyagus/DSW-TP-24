@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { NavLink as Link, useNavigate} from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../libs/axios.tsx'
 import './Register.css';
 import { toast } from 'sonner';
+import { useDefaultScroll } from "../../libs/globalFunctions.tsx";
 
 export function Register(){
-    useEffect(() => {
-        window.scrollTo(0, 0)
-      }, [])
+    useDefaultScroll()
 
       const[username, setUsername] = useState('');
       const[first_name, setFirstName] = useState('');
@@ -19,13 +18,13 @@ export function Register(){
       const[confirmpass, setConfirmPassword] = useState('');
       const[id_country, setCountry] = useState(1);
 
-      let navigate = useNavigate()
+      const navigate = useNavigate()
 
       const handleSubmit = async () => {
         if (password === confirmpass){
         try{
             const response = 
-                await axios.post('http://localhost:3000/api/v1/register',
+                await axios.post('/register',
                     {username, first_name, last_name, birthday, phone, email, password, id_country});
             toast.success(response.data, {
                 description: 'Redirecting to home page',
@@ -41,8 +40,9 @@ export function Register(){
     } }
 
     function handleCountryChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        setCountry(e.currentTarget.value);
+        setCountry(parseInt(e.currentTarget.value));
     }
+    
 
     return(
         <div className="mt-[88px] lg:relative">
@@ -91,29 +91,6 @@ export function Register(){
 
             </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div>
     )
 };

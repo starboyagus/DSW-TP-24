@@ -1,27 +1,29 @@
 import { useEffect, useState, useRef } from "react";
 import './Slots.css';
+import { useContext } from "react";
+import { userContext } from "../../../App.tsx";
 import { GamesSideBar } from '../SideBar/GamesSideBar.tsx';
 import slotSpinSound from "../../../assets/sounds/slotSsound.mp3"
 import slotSpinStart from "../../../assets/sounds/slotStart.mp3"
 import slotWinSound from "../../../assets/sounds/SlotWin.mp3"
 import clickSound from "../../../assets/sounds/click.mp3"
 import mutedIcon from "../../../assets/images/mutedIcon.png"
-import axios from 'axios';
-
+import axios from '../../../libs/axios.tsx'
+import { useDefaultScroll } from "../../../libs/globalFunctions.tsx";
 
 interface User{
-    id: string
     balance: number
     setMoney: React.Dispatch<React.SetStateAction<number>>;
-    role: string
 }
 
 export function Slots(user:User) {
+    useDefaultScroll()
     
     const token = localStorage.getItem('jwt-token');
-    const role = user.role
+    const contextData = useContext(userContext);
+    const role = contextData.role
 
-    var id = user.id
+    const gameNumber = 2
     const slotSpin = new Audio(slotSpinSound)
     const slotStart = new Audio(slotSpinStart)
     const slotWin = new Audio(slotWinSound)
@@ -29,38 +31,22 @@ export function Slots(user:User) {
     const instructionRef = useRef<HTMLDivElement>(null);
 
     function patchUser(newMoney:number) {
-        axios.put(`http://localhost:3000/api/v1/users/${id}`, {
+        axios.put(`/users/${contextData.id_user}`, {
             token,
             role,
             balance: `${newMoney}`,
         })
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
     }
 
-    useEffect(() => {
-        window.scrollTo(0, 0)}, []
-    )
-
     function postGame(bet:number, win:number) {
-        axios.post(`http://localhost:3000/api/v1/usergames`, {
+        axios.post(`/usergames`, {
             token,
             role,
-            id_game: 2,
-            id_user: id,
+            id_game: gameNumber,
+            id_user: contextData.id_user,
             bet: bet,
             winning: win
         })
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
     }
 
     useEffect(() => {
@@ -97,25 +83,11 @@ export function Slots(user:User) {
     function getRandomInt(min:number, max:number) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    
-    const bet50 = () => {
-        bet = 50
-        Play()
-    }
 
-    const bet150 = () => {
-        bet = 150
-        Play()
-    }
-
-    const bet300 = () => {
-        bet = 300
-        Play()
-    }
-
-    const Play = () => {
+    const play = (amount:number) => {
         setIsActive(false)
         setWin("")
+        bet = amount
         if(user.balance < bet) {
             setError("Insufficient Balance")
             setIsActive(true)
@@ -177,13 +149,7 @@ export function Slots(user:User) {
         slotSpin.pause()
         slotSpin.currentTime = 0
         if((Reels[x1] == Reels[y1]) && (Reels[z1] == Reels[x1]) && (Reels[z1] == Reels[y1])) {
-            if (bet == 50) {
-                setWin("You win 200 credits!")
-            } else if (bet == 150) {
-                setWin("You win 600 credits!")
-            } else if (bet == 300) {
-                setWin("You win 1200 credits!")
-            }
+            setWin(`You win ${bet * 4} credits!`)
             if(isMuted == false) {
                 slotWin.play() 
             }
@@ -191,13 +157,7 @@ export function Slots(user:User) {
             user.setMoney(user.balance + (bet * 4))
             patchUser(user.balance + (bet * 4))
         } else if ((Reels[x2] == Reels[y1]) && (Reels[z0] == Reels[y1]) && (Reels[x2] == Reels[z0])) {
-            if (bet == 50) {
-                setWin("You win 100 credits!")
-            } else if (bet == 150) {
-                setWin("You win 300 credits!")
-            } else if (bet == 300) {
-                setWin("You win 600 credits!")
-            }
+            setWin(`You win ${bet * 2} credits!`)
             if(isMuted == false) {
                 slotWin.play() 
             }
@@ -205,15 +165,9 @@ export function Slots(user:User) {
             user.setMoney(user.balance + (bet * 2))
             patchUser(user.balance + (bet * 2))
         } else if ((Reels[x0] == Reels[y1]) && (Reels[z2] == Reels[y1]) && (Reels[x0] == Reels[z2])) {
-            if (bet == 50) {
-                setWin("You win 100 credits!")
-            } else if (bet == 150) {
-                setWin("You win 300 credits!")
-            } else if (bet == 300) {
-                setWin("You win 600 credits!")
-            }
+            setWin(`You win ${bet * 2} credits!`)
             if(isMuted == false) {
-                slotWin.play() 
+                slotWin.play()
             }
             postGame(bet, bet*2)
             user.setMoney(user.balance + (bet * 2))
@@ -240,9 +194,9 @@ export function Slots(user:User) {
                         <div className="reel" id="reel3"></div>
                     </div>
                     <div className="buttonsBet">
-                        <button className={isActive ? "buttonTragamonedas" : "buttonTragamonedas buttonDisabled"} onClick={bet50} id="boton">Bet 50 Credits</button>
-                        <button className={isActive ? "buttonTragamonedas" : "buttonTragamonedas buttonDisabled"} onClick={bet150} id="boton">Bet 150 Credits</button>
-                        <button className={isActive ? "buttonTragamonedas" : "buttonTragamonedas buttonDisabled"} onClick={bet300} id="boton">Bet 300 Credits</button>
+                        <button className={isActive ? "buttonTragamonedas" : "buttonTragamonedas buttonDisabled"} onClick={() => play(50)} id="boton">Bet 50 Credits</button>
+                        <button className={isActive ? "buttonTragamonedas" : "buttonTragamonedas buttonDisabled"} onClick={() => play(150)} id="boton">Bet 150 Credits</button>
+                        <button className={isActive ? "buttonTragamonedas" : "buttonTragamonedas buttonDisabled"} onClick={() => play(300)} id="boton">Bet 300 Credits</button>
                     </div>
                     <div className="slotsMessages" ref={instructionRef}>
                         <p className="message">{Win}</p>

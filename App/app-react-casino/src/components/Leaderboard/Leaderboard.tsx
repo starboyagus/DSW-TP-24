@@ -1,4 +1,6 @@
-import axios from 'axios';
+import axios from '../../libs/axios'
+import { useContext } from "react";
+import { userContext } from '../../App';
 import { useEffect, useState } from 'react';
 import './Leaderboard.css';
 import { toast } from 'sonner'
@@ -14,23 +16,22 @@ interface UserType {
     role: string;
 }
 
-interface parameters {
-    role: string;
-}
 
-export function Leaderboard({role}:parameters) {
+export function Leaderboard() {
+    const contextData = useContext(userContext);
+    const role = contextData.role
     const [user, setUser] = useState<UserType[]>([]);
     const [isRotated, setIsRotated] = useState(false);
     const [isAscending, setIsAscending] = useState(false);
     const [search, setSearch] = useState('');
 
-    let navigate = useNavigate()
+    const navigate = useNavigate()
     const token = localStorage.getItem('jwt-token');
 
     const GetUser = async () => {
         try{
             const response = 
-            await axios.get('http://localhost:3000/api/v1/userGames/leaderboards', { params: { token, role } } )
+            await axios.get('/userGames/leaderboards', { params: { token, role } } )
             setUser(response.data)
         } catch(error) {
             toast.error(error.response.data, {
@@ -43,6 +44,7 @@ export function Leaderboard({role}:parameters) {
         }
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         GetUser();
     }, []);
 
@@ -56,7 +58,7 @@ export function Leaderboard({role}:parameters) {
     };
 
     return (
-        <div className="list-main">
+        <div className="leaderboard-list-main">
             <div className='title'>
                 <h2 className='title-user'>Leaderboard</h2>
                 <div className="new-user-main">

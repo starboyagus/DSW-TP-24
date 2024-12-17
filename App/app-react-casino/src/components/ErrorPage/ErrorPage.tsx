@@ -1,14 +1,10 @@
-import { useEffect } from "react"
 import { NavLink as Link } from 'react-router-dom'
 import './ErrorPage.css';
+import { useDefaultScroll } from "../../libs/globalFunctions.tsx";
 
 
 export function ErrorPage(){
-    useEffect(() => {
-        window.scrollTo(0, 0)
-      }, [])
-
-
+    useDefaultScroll()
     return(
         <>
         <div className="error-container">

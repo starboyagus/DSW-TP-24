@@ -1,5 +1,6 @@
 const loginService = require('../services/login.service')
 const service = new loginService();
+require('dotenv').config();
 
 const userService = require('../services/user.service')
 
@@ -17,7 +18,6 @@ const signInUser = async (req, res) => {
         id_user: user.id_user,
         role: user.role,
         username: user.username,
-        balance: user.balance,
         email: user.email,
         phone: user.phone,
 
@@ -34,7 +34,7 @@ const signInUser = async (req, res) => {
         }
 
         //Autentificar con JWT
-        const token = jwt.sign({data}, "UTimbaN", { expiresIn: '1h'});
+        const token = jwt.sign({data}, process.env.TOKEN_KEY, { expiresIn: '72h'});
 
         //Send status
         res.status(200).send({ message: 'success', accessToken: token })

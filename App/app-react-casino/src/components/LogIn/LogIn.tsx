@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink as Link, useNavigate } from 'react-router-dom'
-import axios from 'axios';
+import axios from '../../libs/axios.tsx'
 import './LogIn.css'
 
 export const LogIn = ({onClose}: {onClose: Function}) => {
@@ -8,12 +8,12 @@ export const LogIn = ({onClose}: {onClose: Function}) => {
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
 
-    let navigate = useNavigate()
+    const navigate = useNavigate()
 
     const handleSubmit = async () => {
         try{
             const response = 
-                await axios.post('http://localhost:3000/api/v1/login',
+                await axios.post('/login/',
                     { username, password });
             setMessage(response.data);
             navigate("/")

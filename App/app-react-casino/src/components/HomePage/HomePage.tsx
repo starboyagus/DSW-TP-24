@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
 import './HomePage.css'
+import { useDefaultScroll } from "../../libs/globalFunctions.tsx";
 
 export function HomePage() {
-    useEffect(() => {
-        window.scrollTo(0, 0)
-      }, [])
+    useDefaultScroll()
+
 
     return(
         <div>

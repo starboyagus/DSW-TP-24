@@ -1,28 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useDefaultScroll } from "../../../libs/globalFunctions.tsx";
 import emailjs from '@emailjs/browser';
 import { toast } from 'sonner';
 import './Help.css';
 
 export function Help() {
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+    useDefaultScroll()
+    
 
     const form = useRef<HTMLFormElement | null>(null);
     const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         emailjs
-            .sendForm('service_ypyb48j', 'template_iejz0rb', form.current!, {
-                publicKey: 'cO0nIpEJQcJ5Fdgqc',
+            .sendForm(import.meta.env.VITE_SERIVICE_ID_HELP, import.meta.env.VITE_TEMPLATE_ID_HELP, form.current!, {
+                publicKey: import.meta.env.VITE_PUBLIC_KEY_HELP,
             })
             .then(
                 () => {
-                    console.log('SUCCESS');
                     return toast.success('Mail enviado con éxito!');
                 },
                 (error) => {
-                    console.log('FAILED', error.text);
-                    return toast.error('Ocurrió un error al enviar el Mail');
+                    return toast.error(error, { description: 'Ocurrió un error al enviar el Mail' });
                 },
             );
     };
